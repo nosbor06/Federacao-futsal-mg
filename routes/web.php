@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TimeController;
+use App\Http\Controllers\AtletaController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,3 +15,4 @@ use App\Http\Controllers\TimeController;
 */
 
 Route::resource('times', TimeController::class);
+Route::resource('atletas', AtletaController::class);
