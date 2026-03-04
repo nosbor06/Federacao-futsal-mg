@@ -17,10 +17,9 @@ use App\Http\Controllers\CampeonatoController;
 Route::get('/campeonatos', [CampeonatoController::class,'index'])->name('campeonatos.index');
 Route::get('/campeonatos/create', [CampeonatoController::class,'create'])->name('campeonatos.create');
 Route::post('/campeonatos', [CampeonatoController::class,'store'])->name('campeonatos.store');
-Route::get('/campeonatos/{campeonatos}/edit', [CampeonatoController::class,'edit'])->name('campeonatos.edit');
-Route::put('/campeonatos/{campeonatos}', [CampeonatoController::class,'update'])->name('campeonatos.update');
-Route::delete('/campeonatos/{campeonatos}', [CampeonatoController::class,'destroy'])->name('campeonatos.destroy');
-
+Route::get('/campeonatos/{campeonato}/edit', [CampeonatoController::class,'edit'])->name('campeonatos.edit');
+Route::put('/campeonatos/{campeonato}', [CampeonatoController::class,'update'])->name('campeonatos.update');
+Route::delete('/campeonatos/{campeonato}', [CampeonatoController::class,'destroy'])->name('campeonatos.destroy');
 
 
 
