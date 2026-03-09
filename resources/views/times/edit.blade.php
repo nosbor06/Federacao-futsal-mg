@@ -1,108 +1,48 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar Time - Federação de Futsal</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@extends('layouts.app')
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #0d0d0d;
-            color: white;
-        }
+@section('title', 'Editar Time')
 
-        header {
-            background: linear-gradient(90deg, #8b0000, #000000);
-            padding: 20px;
-            text-align: center;
-            border-bottom: 3px solid #ff0000;
-        }
+@section('content')
 
-        .container {
-            width: 90%;
-            max-width: 600px;
-            margin: 40px auto;
-            background-color: #1a1a1a;
-            padding: 30px;
-            border-radius: 8px;
-        }
+<h2>Editar Time</h2>
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: none;
-            border-radius: 5px;
-        }
+<form action="{{ route('times.update', $time->id) }}" method="POST">
 
-        .btn {
-            padding: 10px 18px;
-            background-color: #b30000;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+    @csrf
+    @method('PUT')
 
-        .btn:hover {
-            background-color: #ff0000;
-        }
+    <div class="mb-3">
+        <label class="form-label">Nome</label>
+        <input type="text" name="nome" class="form-control"
+        value="{{ $time->nome }}" required>
+    </div>
 
-        .error {
-            background-color: #8b0000;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-        }
+    <div class="mb-3">
+        <label class="form-label">CNPJ</label>
+        <input type="text" name="cnpj" class="form-control"
+        value="{{ $time->cnpj }}" required>
+    </div>
 
-        a {
-            color: #ff4d4d;
-            text-decoration: none;
-        }
-    </style>
-</head>
-<body>
+    <div class="mb-3">
+        <label class="form-label">Cidade</label>
+        <input type="text" name="cidade" class="form-control"
+        value="{{ $time->cidade }}" required>
+    </div>
 
-<header>
-    <h1>🏆 Editar Time</h1>
-</header>
+    <div class="mb-3">
+        <label class="form-label">Ginásio</label>
+        <input type="text" name="ginasio" class="form-control"
+        value="{{ $time->ginasio }}" required>
+    </div>
 
-<div class="container">
+    <button class="btn btn-success">
+        Atualizar
+    </button>
 
-    @if ($errors->any())
-        <div class="error">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <a href="{{ route('times.index') }}" class="btn btn-secondary">
+        Voltar
+    </a>
 
-    <form action="{{ route('times.update', $times->id) }}" method="POST">
-        @csrf
-        @method('PUT')
+</form>
 
-        <label>Nome do Time</label>
-        <input type="text" name="nome" value="{{ old('nome', $times->nome) }}" required>
-
-        <label>CNPJ</label>
-        <input type="text" name="cnpj" value="{{ old('cnpj', $times->cnpj) }}" required>
-
-        <label>Cidade</label>
-        <input type="text" name="cidade" value="{{ old('cidade', $times->cidade) }}" required>
-
-        <label>Ginásio</label>
-        <input type="text" name="ginasio" value="{{ old('ginasio', $times->ginasio) }}" required>
-
-        <button type="submit" class="btn">Atualizar</button>
-        <a href="{{ route('times.index') }}">Cancelar</a>
-    </form>
-
-</div>
-
-</body>
-</html>
+@endsection
