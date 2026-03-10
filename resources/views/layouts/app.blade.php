@@ -1,52 +1,56 @@
 <!DOCTYPE html>
+
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>@yield('title', 'Federação Futsal')</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
 </head>
 
 <body class="bg-light">
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
 
-            <a class="navbar-brand" href="{{ route('times.index') }}">
-                Federação Futsal
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+
+        <a class="navbar-brand" href="{{ route('times.index') }}">
+            Federação Futsal mg
+        </a>
+
+        <div class="d-flex gap-2">
+
+            <!-- TIMES -->
+            <a href="{{ route('times.index') }}" class="btn btn-outline-light btn-sm">
+                Times
             </a>
 
-            <div>
-
-                <!-- BOTÃO TIMES -->
-                <a href="{{ route('times.index') }}" class="btn btn-outline-light btn-sm">
-                    Times
-                </a>
-
-                <!-- FUTURO CRUD -->
-                {{-- 
-                <a href="{{ route('campeonatos.index') }}" class="btn btn-outline-light btn-sm">
-                    Campeonatos
-                </a>
-                --}}
-
-            </div>
+            <!-- ATLETAS -->
+            <a href="{{ route('atletas.index') }}" class="btn btn-outline-light btn-sm">
+                Atletas
+            </a>
 
         </div>
-    </nav>
 
-    <main class="container mt-4">
+    </div>
+</nav>
 
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+<main class="container mt-4">
 
-        @yield('content')
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
-    </main>
+    @yield('content')
+
+</main>
+
 
 </body>
 </html>

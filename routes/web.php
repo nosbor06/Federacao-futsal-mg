@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TimeController;
 use App\Http\Controllers\AtletaController;
+use App\Http\Controllers\AuthController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,3 +17,10 @@ use App\Http\Controllers\AtletaController;
 
 Route::resource('times', TimeController::class);
 Route::resource('atletas', AtletaController::class);
+
+
+Route::get('/cadastro', [AuthController::class, 'showCadastro']);
+Route::post('/cadastro', [AuthController::class, 'cadastro']);
+
+Route::get('/login', [AuthController::class, 'showLogin']);
+Route::post('/login', [AuthController::class, 'login']);
