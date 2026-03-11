@@ -6,20 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('tabela_classificacoes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('campeonato_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('time_id')->constrained()->cascadeOnDelete();
+            $table->integer('jogos')->default(0);
+            $table->integer('vitorias')->default(0);
+            $table->integer('empates')->default(0);
+            $table->integer('derrotas')->default(0);
+            $table->integer('gols_pro')->default(0);
+            $table->integer('gols_contra')->default(0);
+            $table->integer('saldo_gols')->default(0);
+            $table->integer('pontos')->default(0);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('tabela_classificacoes');
