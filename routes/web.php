@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CampeonatoController;
 use App\Http\Controllers\TimeController;
 use App\Http\Controllers\AtletaController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +24,11 @@ Route::delete('/campeonatos/{campeonato}', [CampeonatoController::class,'destroy
 // ----- TIMES E ATLETAS ------
 Route::resource('times', TimeController::class);
 Route::resource('atletas', AtletaController::class);
+
+
+// ----- AUTH ------
+Route::get('/cadastro', [AuthController::class, 'showCadastro']);
+Route::post('/cadastro', [AuthController::class, 'cadastro']);
+
+Route::get('/login', [AuthController::class, 'showLogin']);
+Route::post('/login', [AuthController::class, 'login']);

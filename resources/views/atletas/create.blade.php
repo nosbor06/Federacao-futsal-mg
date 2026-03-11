@@ -1,107 +1,60 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Federação de Futsal - Cadastrar Atleta</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #0f0f0f;
-            color: white;
-        }
+@extends('layouts.app')
 
-        header {
-            background: #b30000;
-            padding: 20px;
-            text-align: center;
-            font-size: 22px;
-            font-weight: bold;
-        }
+@section('title', 'Cadastrar Atleta')
 
-        .container {
-            width: 50%;
-            margin: 40px auto;
-            background: #1a1a1a;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px #b30000;
-        }
+@section('content')
 
-        label {
-            display: block;
-            margin-top: 15px;
-        }
+<h2 class="mb-4">Cadastrar Atleta</h2>
 
-        input, select {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: none;
-            border-radius: 5px;
-        }
+<form action="{{ route('atletas.store') }}" method="POST">
 
-        button {
-            margin-top: 20px;
-            background: #b30000;
-            color: white;
-            padding: 10px;
-            border: none;
-            width: 100%;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
+    @csrf
 
-        button:hover {
-            background: #ff1a1a;
-        }
+    <div class="mb-3">
+        <label class="form-label">Nome</label>
+        <input type="text" name="nome" class="form-control" required>
+    </div>
 
-        a {
-            color: #ff4d4d;
-            text-decoration: none;
-        }
-    </style>
-</head>
-<body>
+    <div class="mb-3">
+        <label class="form-label">CPF</label>
+        <input type="text" name="cpf" class="form-control" required>
+    </div>
 
-<header>
-    Federação Paulista de Futsal ⚽
-</header>
+    <div class="mb-3">
+        <label class="form-label">Data de Nascimento</label>
+        <input type="date" name="data_nascimento" class="form-control" required>
+    </div>
 
-<div class="container">
-    <h2>Cadastrar Novo Atleta</h2>
+    <div class="mb-3">
+        <label class="form-label">Categoria</label>
+        <input type="text" name="categoria" class="form-control" required>
+    </div>
 
-    <form action="{{ route('atletas.store') }}" method="POST">
-        @csrf
+    <div class="mb-3">
+        <label class="form-label">Time</label>
 
-        <label>Nome</label>
-        <input type="text" name="nome" required>
+        <select name="time_id" class="form-select" required>
 
-        <label>CPF</label>
-        <input type="text" name="cpf" required>
-
-        <label>Data de Nascimento</label>
-        <input type="date" name="data_nascimento" required>
-
-        <label>Categoria</label>
-        <input type="text" name="categoria" required>
-
-        <label>Time</label>
-        <select name="time_id" required>
             @foreach($times as $time)
+
                 <option value="{{ $time->id }}">
                     {{ $time->nome }}
                 </option>
+
             @endforeach
+
         </select>
 
-        <button type="submit">Cadastrar Atleta</button>
-    </form>
+    </div>
 
-    <br>
-    <a href="{{ route('atletas.index') }}">Voltar</a>
-</div>
+    <button type="submit" class="btn btn-success">
+        Salvar Atleta
+    </button>
 
-</body>
-</html>
+    <a href="{{ route('atletas.index') }}" class="btn btn-secondary">
+        Voltar
+    </a>
+
+</form>
+
+@endsection
