@@ -1,7 +1,5 @@
-@extends('layouts.app')
-
+@extends('Layout.app')
 @section('title', 'Cadastrar Time')
-
 @section('content')
 
 <h2 class="mb-4">Cadastrar Time</h2>
