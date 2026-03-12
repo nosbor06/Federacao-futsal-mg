@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\CampeonatoController;
 use App\Http\Controllers\TimeController;
 use App\Http\Controllers\AtletaController;
+use App\Http\Controllers\TabelaClassificacaoController;
 use App\Http\Controllers\AuthController;
 
 /*
@@ -48,8 +50,14 @@ Route::middleware('auth')->group(function () {
     Route::put('/campeonatos/{campeonato}', [CampeonatoController::class,'update'])->name('campeonatos.update');
     Route::delete('/campeonatos/{campeonato}', [CampeonatoController::class,'destroy'])->name('campeonatos.destroy');
 
-    // TIMES E ATLETAS
+    // TIMES
     Route::resource('times', TimeController::class);
+
+    // ATLETAS
     Route::resource('atletas', AtletaController::class);
+
+    // TABELA DE CLASSIFICAÇÃO
+    Route::resource('TabelaClassificacoes', TabelaClassificacaoController::class)
+        ->parameters(['TabelaClassificacoes' => 'tabelaClassificacao']);
 
 });

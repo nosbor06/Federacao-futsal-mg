@@ -17,7 +17,9 @@
             <div>
                 <a href="{{ route('campeonatos.index') }}" class="btn btn-outline-light btn-sm">Campeonatos</a>
 
-                {{-- Meu querido namorado, adicione a porra do Times aqui depois --}}
+                <a href="{{ route('times.index') }}"class="btn btn-outline-light btn-sm">Times</a>
+
+                <a href="{{ route('TabelaClassificacoes.index') }}"class="btn btn-outline-light btn-sm">Classificação</a>
             </div>
         </div>
     </nav>
