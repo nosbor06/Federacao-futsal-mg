@@ -9,18 +9,18 @@ class TabelaClassificacao extends Model
 {
     use HasFactory;
 
-    protected $table = 'tabela_classificacoes';
+    protected $table = 'TabelaClassificacoes';
 
     protected $fillable = ['campeonato_id', 'time_id', 'jogos', 'vitorias', 'empates', 'derrotas', 'gols_pro', 'gols_contra', 'saldo_gols', 'pontos'];
 
-    public function Campeonato()
+    public function campeonato()
     {
-        return $this->belongsTo(Campeonato::class);
+        return $this->belongsTo(Campeonato::class, 'campeonato_id');
     }
 
-    public function Time()
+    public function time()
     {
-        return $this->belongsTo(Time::class);
+        return $this->belongsTo(Time::class, 'time_id');
     }
 }
 

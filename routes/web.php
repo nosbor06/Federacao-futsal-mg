@@ -2,7 +2,7 @@
 
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Controller;
+
 use App\Http\Controllers\CampeonatoController;
 use App\Http\Controllers\TimeController;
 use App\Http\Controllers\AtletaController;
@@ -14,7 +14,7 @@ use App\Http\Controllers\TabelaClassificacaoController;
 |--------------------------------------------------------------------------
 */
 
-// ------ CAMPEONATOS -------
+// ------ campeonatos -------
 Route::get('/campeonatos', [CampeonatoController::class,'index'])->name('campeonatos.index');
 Route::get('/campeonatos/create', [CampeonatoController::class,'create'])->name('campeonatos.create');
 Route::post('/campeonatos', [CampeonatoController::class,'store'])->name('campeonatos.store');
@@ -25,4 +25,4 @@ Route::delete('/campeonatos/{campeonato}', [CampeonatoController::class,'destroy
 // ----- TIMES, ATLETAS E TABELAS ------
 Route::resource('times', TimeController::class);
 Route::resource('atletas', AtletaController::class);
-Route::resource('tabela_classificacoes', TabelaClassificacaoController::class);
+Route::resource('TabelaClassificacoes', TabelaClassificacaoController::class)->parameters(['TabelaClassificacoes' => 'tabelaClassificacao']);

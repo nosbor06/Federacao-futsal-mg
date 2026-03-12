@@ -31,8 +31,7 @@ class CampeonatoController extends Controller
 
         Campeonato::create($validated);
 
-        return redirect()->route('campeonatos.index')
-            ->with('success','O campeonato foi cadastrado com sucesso!');
+        return redirect()->route('campeonatos.index')->with('success','O campeonato foi cadastrado com sucesso!');
     }
 
     public function edit(Campeonato $campeonato)

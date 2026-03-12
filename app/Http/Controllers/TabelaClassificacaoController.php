@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Time;
 use App\Models\Campeonato;
 use Illuminate\Http\Request;
@@ -12,13 +11,9 @@ class TabelaClassificacaoController extends Controller
 {
     public function index()
     {
-        try{
-            $tabela_classificacoes = TabelaClassificacao::with(['campeonatos', 'times', ])->orderByDesc('pontos')->get();
-        }catch(error){
-            $tabela_classificacao = null;
-        }
+        $tabelaClassificacoes = TabelaClassificacao::with(['campeonato','time'])->orderByDesc('pontos')->get();
 
-        return view('tabela_classificacoes.index', compact('tabela_classificacoes'));
+        return view('TabelaClassificacoes.index', compact('tabelaClassificacoes'));
     }
 
     public function create()
@@ -26,7 +21,7 @@ class TabelaClassificacaoController extends Controller
         $campeonatos = Campeonato::all();
         $times = Time::all();
 
-        return view('tabela_classificacoes.create', compact('campeonatos','times'));
+        return view('TabelaClassificacoes.create', compact('campeonatos','times'));
     }
 
     public function store(Request $request)
@@ -38,7 +33,7 @@ class TabelaClassificacaoController extends Controller
 
         TabelaClassificacao::create($validated);
 
-        return redirect()->route('tabela_classificacoes.index')->with('success','O time foi adicionado à tabela!');
+        return redirect()->route('TabelaClassificacoes.index')->with('success','O time foi adicionado à tabela!');
     }
 
     public function edit(TabelaClassificacao $tabelaClassificacao)
@@ -46,7 +41,7 @@ class TabelaClassificacaoController extends Controller
         $campeonatos = Campeonato::all();
         $times = Time::all();
 
-        return view('tabela_classificacoes.edit', compact('tabelaClassificacao','campeonatos','times'));
+        return view('TabelaClassificacoes.edit', compact('tabelaClassificacao','campeonatos','times'));
     }
 
     public function update(Request $request, TabelaClassificacao $tabelaClassificacao)
@@ -58,13 +53,13 @@ class TabelaClassificacaoController extends Controller
 
         $tabelaClassificacao->update($validated);
 
-        return redirect()->route('tabela_classificacoes.index')->with('success','Registro atualizado!');
+        return redirect()->route('TabelaClassificacoes.index')->with('success','Registro atualizado!');
     }
 
     public function destroy(TabelaClassificacao $tabelaClassificacao)
     {
         $tabelaClassificacao->delete();
 
-        return redirect()->route('tabela_classificacoes.index')->with('success','Registro atualizado!');
+        return redirect()->route('TabelaClassificacoes.index')->with('success','Registro atualizado!');
     }
 }

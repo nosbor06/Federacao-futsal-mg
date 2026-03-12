@@ -1,7 +1,5 @@
 @extends('Layout.app')
-
 @section('title','Adicionar à Classificação')
-
 @section('content')
 
 <div class="container mt-4">
@@ -13,7 +11,7 @@
 
         <div class="card-body">
 
-            <form method="POST" action="{{ route('tabela_classificacoes.store') }}">
+            <form method="POST" action="{{ route('TabelaClassificacoes.store') }}">
                 @csrf
 
                 <div class="mb-3">
@@ -39,7 +37,7 @@
                 </div>
 
                 <div class="d-flex justify-content-between">
-                    <a href="{{ route('tabela_classificacoes.index') }}" class="btn btn-secondary">Voltar</a>
+                    <a href="{{ route('TabelaClassificacoes.index') }}" class="btn btn-secondary">Voltar</a>
 
                     <button class="btn btn-success">Salvar</button>
                 </div>

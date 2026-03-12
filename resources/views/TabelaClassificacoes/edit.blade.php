@@ -14,7 +14,7 @@
     </div>
     @endif
 
-    <form method="POST"action="{{ route('tabela_classificacoes.update',$tabelaClassificacao->id) }}">
+    <form method="POST" action="{{ route('TabelaClassificacoes.update', $tabelaClassificacao->id) }}">
         @csrf
         @method('PUT')
 

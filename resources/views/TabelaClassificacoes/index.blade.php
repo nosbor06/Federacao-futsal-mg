@@ -6,7 +6,7 @@
 
     <div class="d-flex justify-content-between mb-3">
         <h2>Tabela de Classificação</h2>
-        <a href="{{ route('tabela_classificacoes.create') }}" class="btn btn-success">Adicionar Time</a>
+        <a href="{{ route('TabelaClassificacoes.create') }}" class="btn btn-success">Adicionar Time</a>
     </div>
 
     @if(session('success'))
@@ -43,12 +43,12 @@
 
                         <td class="text-end">
 
-                            <a href="{{ route('tabela_classificacoes.edit',$item->id) }}"
+                            <a href="{{ route('TabelaClassificacoes.edit',$item->id) }}"
                                class="btn btn-sm btn-primary">
                                Editar
                             </a>
 
-                            <form action="{{ route('tabela_classificacoes.destroy',$item->id) }}"
+                            <form action="{{ route('TabelaClassificacoes.destroy',$item->id) }}"
                                   method="POST"
                                   class="d-inline">
                                 @csrf

@@ -19,7 +19,7 @@
 
                 <a href="{{ route('times.index') }}"class="btn btn-outline-light btn-sm">Times</a>
 
-                <a href="{{ route('tabela_classificacoes.index') }}"class="btn btn-outline-light btn-sm">Classificação</a>
+                <a href="{{ route('TabelaClassificacoes.index') }}"class="btn btn-outline-light btn-sm">Classificação</a>
             </div>
         </div>
     </nav>

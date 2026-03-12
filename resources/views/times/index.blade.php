@@ -1,7 +1,5 @@
-@extends('layouts.app')
-
+@extends('Layout.app')
 @section('title', 'Times')
-
 @section('content')
 
 <div class="d-flex justify-content-between mb-3">
