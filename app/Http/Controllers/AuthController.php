@@ -20,16 +20,17 @@ class AuthController extends Controller
     public function cadastro(Request $request)
     {
         $request->validate([
-            'nome' => 'required|string|max:200',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6'
+            'nome' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
+            'tipo' => 'required'
         ]);
 
         User::create([
             'nome' => $request->nome,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'tipo' => 'responsavel'
+            'tipo' => $request->tipo
         ]);
 
         return redirect('/login')->with('success', 'Usuário cadastrado com sucesso!');
@@ -46,17 +47,18 @@ class AuthController extends Controller
     {
         $credenciais = $request->only('email','password');
 
-        if(Auth::attempt($credenciais)){
+        if (Auth::attempt($credenciais)) {
 
             $user = Auth::user();
 
-            // ADMIN
-            if($user->tipo == 'admin'){
+            // redirecionamento baseado no tipo
+            if ($user->tipo == 'admin') {
                 return redirect('/admin/dashboard');
             }
 
-            // RESPONSÁVEL
-            return redirect('/responsavel/dashboard');
+            if ($user->tipo == 'responsavel') {
+                return redirect('/responsavel/dashboard');
+            }
         }
 
         return back()->with('error','Email ou senha inválidos');
