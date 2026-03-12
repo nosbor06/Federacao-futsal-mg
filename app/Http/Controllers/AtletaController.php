@@ -10,13 +10,27 @@ class AtletaController extends Controller
 {
     public function index()
     {
-        $atletas = Atleta::with('time')->orderBy('id')->get();
+        if(auth()->user()->tipo == 'admin'){
+            $atletas = Atleta::with('time')->orderBy('id')->get();
+        } else {
+
+            $atletas = Atleta::whereHas('time', function($query){
+                $query->where('user_id', auth()->id());
+            })->with('time')->orderBy('id')->get();
+
+        }
+
         return view('atletas.index', compact('atletas'));
     }
 
     public function create()
     {
-        $times = Time::all();
+        if(auth()->user()->tipo == 'admin'){
+            $times = Time::all();
+        } else {
+            $times = Time::where('user_id', auth()->id())->get();
+        }
+
         return view('atletas.create', compact('times'));
     }
 
@@ -30,13 +44,13 @@ class AtletaController extends Controller
             'time_id' => 'required|exists:times,id'
         ]);
 
-        Atleta::create($request->only([
-            'nome',
-            'cpf',
-            'data_nascimento',
-            'categoria',
-            'time_id'
-        ]));
+        Atleta::create([
+            'nome' => $request->nome,
+            'cpf' => $request->cpf,
+            'data_nascimento' => $request->data_nascimento,
+            'categoria' => $request->categoria,
+            'time_id' => $request->time_id
+        ]);
 
         return redirect()
             ->route('atletas.index')
@@ -45,8 +59,17 @@ class AtletaController extends Controller
 
     public function edit(string $id)
     {
-        $atleta = Atleta::findOrFail($id);
-        $times = Time::all();
+        if(auth()->user()->tipo == 'admin'){
+            $atleta = Atleta::findOrFail($id);
+            $times = Time::all();
+        } else {
+
+            $atleta = Atleta::whereHas('time', function($query){
+                $query->where('user_id', auth()->id());
+            })->findOrFail($id);
+
+            $times = Time::where('user_id', auth()->id())->get();
+        }
 
         return view('atletas.edit', compact('atleta', 'times'));
     }
@@ -61,15 +84,22 @@ class AtletaController extends Controller
             'time_id' => 'required|exists:times,id'
         ]);
 
-        $atleta = Atleta::findOrFail($id);
+        if(auth()->user()->tipo == 'admin'){
+            $atleta = Atleta::findOrFail($id);
+        } else {
 
-        $atleta->update($request->only([
-            'nome',
-            'cpf',
-            'data_nascimento',
-            'categoria',
-            'time_id'
-        ]));
+            $atleta = Atleta::whereHas('time', function($query){
+                $query->where('user_id', auth()->id());
+            })->findOrFail($id);
+        }
+
+        $atleta->update([
+            'nome' => $request->nome,
+            'cpf' => $request->cpf,
+            'data_nascimento' => $request->data_nascimento,
+            'categoria' => $request->categoria,
+            'time_id' => $request->time_id
+        ]);
 
         return redirect()
             ->route('atletas.index')
@@ -78,7 +108,15 @@ class AtletaController extends Controller
 
     public function destroy(string $id)
     {
-        $atleta = Atleta::findOrFail($id);
+        if(auth()->user()->tipo == 'admin'){
+            $atleta = Atleta::findOrFail($id);
+        } else {
+
+            $atleta = Atleta::whereHas('time', function($query){
+                $query->where('user_id', auth()->id());
+            })->findOrFail($id);
+        }
+
         $atleta->delete();
 
         return redirect()

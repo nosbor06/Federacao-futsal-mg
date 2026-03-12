@@ -16,24 +16,24 @@ class AuthController extends Controller
         return view('auth.cadastro');
     }
 
-    // Salvar cadastro no banco
+    // Salvar cadastro
     public function cadastro(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
+            'nome' => 'required|string|max:200',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6'
         ]);
 
         User::create([
-            'name' => $request->name,
+            'nome' => $request->nome,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'tipo' => 'responsavel'
         ]);
 
         return redirect('/login')->with('success', 'Usuário cadastrado com sucesso!');
     }
-
 
     // Mostrar tela de login
     public function showLogin()
@@ -41,19 +41,26 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-
     // Fazer login
-   public function login(Request $request)
+    public function login(Request $request)
     {
-        $credenciais = $request->only('email', 'password');
+        $credenciais = $request->only('email','password');
 
-        if (Auth::attempt($credenciais)) {
-            return redirect('/dashboard');
+        if(Auth::attempt($credenciais)){
+
+            $user = Auth::user();
+
+            // ADMIN
+            if($user->tipo == 'admin'){
+                return redirect('/admin/dashboard');
+            }
+
+            // RESPONSÁVEL
+            return redirect('/responsavel/dashboard');
         }
 
-        return back()->with('error', 'Email ou senha inválidos');
+        return back()->with('error','Email ou senha inválidos');
     }
-
 
     // Logout
     public function logout()

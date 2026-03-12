@@ -32,23 +32,6 @@
                     <input type="password" name="password" class="form-control bg-secondary text-white border-0" required>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Tipo de Usuário</label>
-
-                    <select name="tipo" class="form-control bg-secondary text-white border-0">
-
-                        <option value="responsavel">
-                            Responsável do Time
-                        </option>
-
-                        <option value="admin">
-                            Administrador da Federação
-                        </option>
-
-                    </select>
-
-                </div>
-
                 <button type="submit" class="btn btn-light">
                     Cadastrar
                 </button>
