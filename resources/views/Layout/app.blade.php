@@ -15,6 +15,10 @@
             <a class="navbar-brand" href="/">Federação Futsal</a>
 
             <div>
+                  <!-- ATLETAS -->
+            <a href="{{ route('atletas.index') }}" class="btn btn-outline-light btn-sm">
+                Atletas
+            </a>
                 <a href="{{ route('campeonatos.index') }}" class="btn btn-outline-light btn-sm">Campeonatos</a>
 
                 <a href="{{ route('times.index') }}"class="btn btn-outline-light btn-sm">Times</a>
