@@ -16,7 +16,7 @@ class AuthController extends Controller
         return view('auth.cadastro');
     }
 
-    // Salvar cadastro no banco
+    // Salvar cadastro
     public function cadastro(Request $request)
     {
         $request->validate([
@@ -36,18 +36,16 @@ class AuthController extends Controller
         return redirect('/login')->with('success', 'Usuário cadastrado com sucesso!');
     }
 
-
     // Mostrar tela de login
     public function showLogin()
     {
         return view('auth.login');
     }
 
-
     // Fazer login
     public function login(Request $request)
     {
-        $credenciais = $request->only('email', 'password');
+        $credenciais = $request->only('email','password');
 
         if (Auth::attempt($credenciais)) {
 
@@ -63,9 +61,8 @@ class AuthController extends Controller
             }
         }
 
-        return back()->with('error', 'Email ou senha inválidos');
+        return back()->with('error','Email ou senha inválidos');
     }
-
 
     // Logout
     public function logout()

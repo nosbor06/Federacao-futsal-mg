@@ -11,39 +11,45 @@
 
 <div class="container vh-100 d-flex justify-content-center align-items-center">
 
-    <div class="card p-4 shadow" style="width: 400px;">
-        
-        <h3 class="text-center mb-4">Login</h3>
+    <div class="card bg-dark text-white shadow" style="width: 400px; border: 1px solid #444;">
 
-        @if(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
+        <div class="card-header bg-black text-white text-center">
+            <h4>Login</h4>
+        </div>
+
+        <div class="card-body">
+
+            @if(session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            <form method="POST" action="/login">
+                @csrf
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control bg-secondary text-white border-0" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Senha</label>
+                    <input type="password" name="password" class="form-control bg-secondary text-white border-0" required>
+                </div>
+
+                <button type="submit" class="btn btn-light w-100">
+                    Entrar
+                </button>
+
+            </form>
+
+            <div class="text-center mt-3">
+                <a href="/cadastro" class="text-white">
+                    Criar conta
+                </a>
             </div>
-        @endif
 
-        <form method="POST" action="/login">
-            @csrf
-
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Senha</label>
-                <input type="password" name="password" class="form-control" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">
-                Entrar
-            </button>
-
-        </form>
-
-        <div class="text-center mt-3">
-            <a href="/cadastro" class="link-primary">
-                Criar conta
-            </a>
         </div>
 
     </div>

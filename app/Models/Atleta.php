@@ -16,11 +16,12 @@ class Atleta extends Model
         'cpf',
         'data_nascimento',
         'categoria',
-        'time_id',
+        'time_id'
     ];
 
+    // Relacionamento com Time
     public function time()
     {
-        return $this->belongsTo(Time::class);
+        return $this->belongsTo(Time::class, 'time_id');
     }
 }
