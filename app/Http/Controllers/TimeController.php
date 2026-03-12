@@ -10,7 +10,14 @@ class TimeController extends Controller
 
     public function index()
     {
-        $times = Time::orderBy('id')->get();
+        if(auth()->user()->tipo == 'admin'){
+            $times = Time::orderBy('id')->get();
+        } else {
+            $times = Time::where('user_id', auth()->id())
+                ->orderBy('id')
+                ->get();
+        }
+
         return view('times.index', compact('times'));
     }
 
@@ -28,12 +35,13 @@ class TimeController extends Controller
             'ginasio' => 'required|string|max:200',
         ]);
 
-        Time::create($request->only([
-            'nome',
-            'cnpj',
-            'cidade',
-            'ginasio'
-        ]));
+        Time::create([
+            'nome' => $request->nome,
+            'cnpj' => $request->cnpj,
+            'cidade' => $request->cidade,
+            'ginasio' => $request->ginasio,
+            'user_id' => auth()->id()
+        ]);
 
         return redirect()
             ->route('times.index')
@@ -42,7 +50,11 @@ class TimeController extends Controller
 
     public function edit(string $id)
     {
-        $time = Time::findOrFail($id);
+        $time = Time::where('id', $id)
+            ->when(auth()->user()->tipo != 'admin', function($query){
+                $query->where('user_id', auth()->id());
+            })
+            ->firstOrFail();
 
         return view('times.edit', compact('time'));
     }
@@ -56,14 +68,18 @@ class TimeController extends Controller
             'ginasio' => 'required|string|max:200',
         ]);
 
-        $time = Time::findOrFail($id);
+        $time = Time::where('id', $id)
+            ->when(auth()->user()->tipo != 'admin', function($query){
+                $query->where('user_id', auth()->id());
+            })
+            ->firstOrFail();
 
-        $time->update($request->only([
-            'nome',
-            'cnpj',
-            'cidade',
-            'ginasio'
-        ]));
+        $time->update([
+            'nome' => $request->nome,
+            'cnpj' => $request->cnpj,
+            'cidade' => $request->cidade,
+            'ginasio' => $request->ginasio
+        ]);
 
         return redirect()
             ->route('times.index')
@@ -72,7 +88,12 @@ class TimeController extends Controller
 
     public function destroy(string $id)
     {
-        $time = Time::findOrFail($id);
+        $time = Time::where('id', $id)
+            ->when(auth()->user()->tipo != 'admin', function($query){
+                $query->where('user_id', auth()->id());
+            })
+            ->firstOrFail();
+
         $time->delete();
 
         return redirect()

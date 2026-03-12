@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-     public function up(): void
+    public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
 
@@ -18,7 +18,7 @@ return new class extends Migration
 
             $table->string('password');
 
-            $table->enum('tipo', ['admin','responsavel']);
+            $table->enum('tipo', ['admin', 'responsavel'])->default('responsavel');
 
             $table->rememberToken();
 
@@ -31,5 +31,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('users');
     }
-
 };
