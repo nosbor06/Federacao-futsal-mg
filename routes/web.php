@@ -21,13 +21,13 @@ Route::get('/', function () {
 
 
 // -------- AUTH --------
-Route::get('/cadastro', [AuthController::class, 'showCadastro']);
-Route::post('/cadastro', [AuthController::class, 'cadastro']);
+Route::get('/cadastro', [AuthController::class, 'showCadastro'])->name('cadastro');
+Route::post('/cadastro', [AuthController::class, 'cadastro'])->name('cadastro.store');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->name('login.auth');
 
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 // -------- ROTAS PROTEGIDAS --------
@@ -36,11 +36,12 @@ Route::middleware('auth')->group(function () {
     // DASHBOARDS
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
-    });
+    })->name('admin.dashboard');
 
     Route::get('/responsavel/dashboard', function () {
         return view('responsavel.dashboard');
-    });
+    })->name('responsavel.dashboard');
+
 
     // CAMPEONATOS
     Route::get('/campeonatos', [CampeonatoController::class,'index'])->name('campeonatos.index');
@@ -50,11 +51,14 @@ Route::middleware('auth')->group(function () {
     Route::put('/campeonatos/{campeonato}', [CampeonatoController::class,'update'])->name('campeonatos.update');
     Route::delete('/campeonatos/{campeonato}', [CampeonatoController::class,'destroy'])->name('campeonatos.destroy');
 
+
     // TIMES
     Route::resource('times', TimeController::class);
 
+
     // ATLETAS
     Route::resource('atletas', AtletaController::class);
+
 
     // TABELA DE CLASSIFICAÇÃO
     Route::resource('TabelaClassificacoes', TabelaClassificacaoController::class)
