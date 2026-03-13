@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    // ================= CADASTRO =================
 
     // Mostrar tela de cadastro
     public function showCadastro()
@@ -19,22 +20,26 @@ class AuthController extends Controller
     // Salvar cadastro
     public function cadastro(Request $request)
     {
-        $request->validate([
-            'nome' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-            'tipo' => 'required'
+        $validated = $request->validate([
+            'nome' => ['required','string','max:100'],
+            'email' => ['required','email','unique:users,email'],
+            'password' => ['required','min:6'],
+            'tipo' => ['required','in:admin,responsavel']
         ]);
 
         User::create([
-            'nome' => $request->nome,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'tipo' => $request->tipo
+            'nome' => $validated['nome'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'tipo' => $validated['tipo']
         ]);
 
-        return redirect('/login')->with('success', 'Usuário cadastrado com sucesso!');
+        // 👉 redireciona direto para login
+        return redirect()->route('login')
+            ->with('success', 'Usuário cadastrado com sucesso! Faça login.');
     }
+
+    // ================= LOGIN =================
 
     // Mostrar tela de login
     public function showLogin()
@@ -45,30 +50,42 @@ class AuthController extends Controller
     // Fazer login
     public function login(Request $request)
     {
-        $credenciais = $request->only('email','password');
+        $credenciais = $request->validate([
+            'email' => ['required','email'],
+            'password' => ['required']
+        ]);
 
         if (Auth::attempt($credenciais)) {
 
+            $request->session()->regenerate();
+
             $user = Auth::user();
 
-            // redirecionamento baseado no tipo
-            if ($user->tipo == 'admin') {
-                return redirect('/admin/dashboard');
+            // Redirecionamento por nível
+            if ($user->tipo === 'admin') {
+                return redirect()->route('admin.dashboard');
             }
 
-            if ($user->tipo == 'responsavel') {
-                return redirect('/responsavel/dashboard');
+            if ($user->tipo === 'responsavel') {
+                return redirect()->route('responsavel.dashboard');
             }
+
+            // fallback
+            return redirect('/');
         }
 
-        return back()->with('error','Email ou senha inválidos');
+        return back()->with('error', 'Email ou senha inválidos.');
     }
 
-    // Logout
-    public function logout()
+    // ================= LOGOUT =================
+
+    public function logout(Request $request)
     {
         Auth::logout();
-        return redirect('/login');
-    }
 
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
+    }
 }
