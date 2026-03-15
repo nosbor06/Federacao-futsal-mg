@@ -1,7 +1,5 @@
-@extends('layouts.app')
-
+@extends('Layout.app')
 @section('title', 'Editar Atleta')
-
 @section('content')
 
 <h2 class="mb-4">Editar Atleta</h2>
