@@ -1,7 +1,5 @@
 @extends('Layout.app')
-
 @section('title', 'Cadastrar Atleta')
-
 @section('content')
 
 <h2 class="mb-4">Cadastrar Atleta</h2>

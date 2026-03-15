@@ -34,9 +34,8 @@ class AuthController extends Controller
             'tipo' => $validated['tipo']
         ]);
 
-        // 👉 redireciona direto para login
-        return redirect()->route('login')
-            ->with('success', 'Usuário cadastrado com sucesso! Faça login.');
+        // redireciona direto para login
+        return redirect()->route('login')->with('success', 'Usuário cadastrado com sucesso! Faça login.');
     }
 
     // ================= LOGIN =================
