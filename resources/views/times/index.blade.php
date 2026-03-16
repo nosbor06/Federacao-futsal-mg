@@ -28,7 +28,12 @@
                 <tr>
                     <td>
                         @if($time->escudo)
-                            <img src="{{ asset($time->escudo) }}"
+                            @php
+                                $escudoUrl = Str::startsWith($time->escudo, ['images/', 'http'])
+                                    ? asset($time->escudo)
+                                    : asset('storage/' . $time->escudo);
+                            @endphp
+                            <img src="{{ $escudoUrl }}"
                                  style="width:40px;height:40px;object-fit:contain;border-radius:6px;">
                         @else
                             <div class="bg-light rounded-2 d-flex align-items-center justify-content-center"
