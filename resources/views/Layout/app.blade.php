@@ -79,7 +79,10 @@
            class="nav-link d-flex align-items-center gap-2 mb-1 {{ request()->routeIs('atletas.*') ? 'active' : '' }}">
             <i class="bi bi-person-fill"></i> Atletas
         </a>
-
+        <a href="{{ route('noticia') }}"
+            class="nav-link d-flex align-items-center gap-2 mb-1 {{ request()->routeIs('noticia') ? 'active' : '' }}">
+             <i class="bi bi-newspaper"></i> Notícias
+        </a>
         @if(auth()->user()->tipo === 'admin')
             <div class="sidebar-label">Competições</div>
             <a href="{{ route('campeonatos.index') }}"

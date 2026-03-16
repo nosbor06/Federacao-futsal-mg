@@ -7,6 +7,7 @@ use App\Http\Controllers\TimeController;
 use App\Http\Controllers\AtletaController;
 use App\Http\Controllers\TabelaClassificacaoController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NoticiaController;
 
 // -------- PÁGINA INICIAL --------
 Route::get('/', function () {
@@ -59,5 +60,8 @@ Route::middleware('auth')->group(function () {
     // Times e Atletas — acesso liberado para ambos, filtro feito no controller
     Route::resource('times', TimeController::class);
     Route::resource('atletas', AtletaController::class);
+
+    // -----------ROTAS NOTICIAS ------------
+    Route::get('/noticia', [NoticiaController::class,'index'])->name('noticia');
 
 });
