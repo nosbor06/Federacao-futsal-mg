@@ -1,12 +1,10 @@
 @extends('Layout.app')
-
 @section('title','Notícias de Futsal')
-
 @section('content')
 
 <div class="container-fluid">
 
-    <h4 class="mb-4">📰 Notícias de Futsal</h4>
+    <h4 class="mb-4"> Notícias de Futsal </h4>
 
     <div class="row">
 

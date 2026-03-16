@@ -13,23 +13,17 @@ class AtletaController extends Controller
         if(auth()->user()->tipo == 'admin'){
             $atletas = Atleta::with('time')->orderBy('id')->get();
         } else {
-
-            $atletas = Atleta::whereHas('time', function($query){
-                $query->where('user_id', auth()->id());
-            })->with('time')->orderBy('id')->get();
-
+            $atletas = Atleta::whereHas('time', fn($q) => $q->where('user_id', auth()->id()))
+                ->with('time')->orderBy('id')->get();
         }
-
         return view('atletas.index', compact('atletas'));
     }
 
     public function create()
     {
-        if(auth()->user()->tipo == 'admin'){
-            $times = Time::all();
-        } else {
-            $times = Time::where('user_id', auth()->id())->get();
-        }
+        $times = auth()->user()->tipo == 'admin'
+            ? Time::all()
+            : Time::where('user_id', auth()->id())->get();
 
         return view('atletas.create', compact('times'));
     }
@@ -37,90 +31,83 @@ class AtletaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nome' => 'required|string|max:200',
-            'cpf' => 'required|string|max:20|unique:atletas,cpf',
+            'nome'            => 'required|string|max:200',
+            'cpf'             => 'required|string|max:20|unique:atletas,cpf',
             'data_nascimento' => 'required|date',
-            'categoria' => 'required|string|max:200',
-            'time_id' => 'required|exists:times,id'
+            'categoria'       => 'required|string|max:200',
+            'time_id'         => 'required|exists:times,id',
+            'foto'            => 'nullable|image|max:2048',
         ]);
+
+        $foto = null;
+        if($request->hasFile('foto')){
+            $foto = $request->file('foto')->store('fotos_atletas', 'public');
+        }
 
         Atleta::create([
-            'nome' => $request->nome,
-            'cpf' => $request->cpf,
+            'nome'            => $request->nome,
+            'cpf'             => $request->cpf,
             'data_nascimento' => $request->data_nascimento,
-            'categoria' => $request->categoria,
-            'time_id' => $request->time_id
+            'categoria'       => $request->categoria,
+            'time_id'         => $request->time_id,
+            'foto'            => $foto,
         ]);
 
-        return redirect()
-            ->route('atletas.index')
-            ->with('success', 'Atleta cadastrado com sucesso!');
+        return redirect()->route('atletas.index')->with('success','Atleta cadastrado com sucesso!');
     }
 
     public function edit(string $id)
     {
         if(auth()->user()->tipo == 'admin'){
             $atleta = Atleta::findOrFail($id);
-            $times = Time::all();
+            $times  = Time::all();
         } else {
-
-            $atleta = Atleta::whereHas('time', function($query){
-                $query->where('user_id', auth()->id());
-            })->findOrFail($id);
-
-            $times = Time::where('user_id', auth()->id())->get();
+            $atleta = Atleta::whereHas('time', fn($q) => $q->where('user_id', auth()->id()))->findOrFail($id);
+            $times  = Time::where('user_id', auth()->id())->get();
         }
-
         return view('atletas.edit', compact('atleta', 'times'));
     }
 
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'nome' => 'required|string|max:200',
-            'cpf' => 'required|string|max:20|unique:atletas,cpf,' . $id,
+            'nome'            => 'required|string|max:200',
+            'cpf'             => 'required|string|max:20|unique:atletas,cpf,' . $id,
             'data_nascimento' => 'required|date',
-            'categoria' => 'required|string|max:200',
-            'time_id' => 'required|exists:times,id'
+            'categoria'       => 'required|string|max:200',
+            'time_id'         => 'required|exists:times,id',
+            'foto'            => 'nullable|image|max:2048',
         ]);
 
-        if(auth()->user()->tipo == 'admin'){
-            $atleta = Atleta::findOrFail($id);
-        } else {
+        $atleta = auth()->user()->tipo == 'admin'
+            ? Atleta::findOrFail($id)
+            : Atleta::whereHas('time', fn($q) => $q->where('user_id', auth()->id()))->findOrFail($id);
 
-            $atleta = Atleta::whereHas('time', function($query){
-                $query->where('user_id', auth()->id());
-            })->findOrFail($id);
+        $dados = [
+            'nome'            => $request->nome,
+            'cpf'             => $request->cpf,
+            'data_nascimento' => $request->data_nascimento,
+            'categoria'       => $request->categoria,
+            'time_id'         => $request->time_id,
+        ];
+
+        if($request->hasFile('foto')){
+            $dados['foto'] = $request->file('foto')->store('fotos_atletas', 'public');
         }
 
-        $atleta->update([
-            'nome' => $request->nome,
-            'cpf' => $request->cpf,
-            'data_nascimento' => $request->data_nascimento,
-            'categoria' => $request->categoria,
-            'time_id' => $request->time_id
-        ]);
+        $atleta->update($dados);
 
-        return redirect()
-            ->route('atletas.index')
-            ->with('success', 'Atleta atualizado com sucesso!');
+        return redirect()->route('atletas.index')->with('success','Atleta atualizado com sucesso!');
     }
 
     public function destroy(string $id)
     {
-        if(auth()->user()->tipo == 'admin'){
-            $atleta = Atleta::findOrFail($id);
-        } else {
-
-            $atleta = Atleta::whereHas('time', function($query){
-                $query->where('user_id', auth()->id());
-            })->findOrFail($id);
-        }
+        $atleta = auth()->user()->tipo == 'admin'
+            ? Atleta::findOrFail($id)
+            : Atleta::whereHas('time', fn($q) => $q->where('user_id', auth()->id()))->findOrFail($id);
 
         $atleta->delete();
 
-        return redirect()
-            ->route('atletas.index')
-            ->with('success', 'Atleta removido com sucesso!');
+        return redirect()->route('atletas.index')->with('success','Atleta removido com sucesso!');
     }
 }
