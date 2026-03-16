@@ -47,7 +47,7 @@
        class="d-flex align-items-center gap-2 px-3 py-3 text-decoration-none"
        style="border-bottom: 1px solid rgba(255,255,255,.08);">
         <img src="{{ asset('images/logo.png') }}" alt="Logo FMF"
-             style="width:42px;height:42px;object-fit:contain;flex-shrink:0;filter:brightness(0) invert(1);">
+             style="width:42px;height:42px;object-fit:contain;flex-shrink:0;">
         <div>
             <div class="text-white fw-bold" style="font-size:13px;line-height:1.2;">Federação Mineira</div>
             <div class="text-white-50" style="font-size:10px;">de Futsal</div>
@@ -70,6 +70,12 @@
             </a>
         @endif
 
+        {{-- Notícias — visível para todos --}}
+        <a href="{{ route('noticia') }}"
+           class="nav-link d-flex align-items-center gap-2 mb-1 {{ request()->routeIs('noticia') ? 'active' : '' }}">
+            <i class="bi bi-newspaper"></i> Notícias
+        </a>
+
         <a href="{{ route('times.index') }}"
            class="nav-link d-flex align-items-center gap-2 mb-1 {{ request()->routeIs('times.*') ? 'active' : '' }}">
             <i class="bi bi-shield-fill"></i> Times
@@ -79,10 +85,7 @@
            class="nav-link d-flex align-items-center gap-2 mb-1 {{ request()->routeIs('atletas.*') ? 'active' : '' }}">
             <i class="bi bi-person-fill"></i> Atletas
         </a>
-        <a href="{{ route('noticia') }}"
-            class="nav-link d-flex align-items-center gap-2 mb-1 {{ request()->routeIs('noticia') ? 'active' : '' }}">
-             <i class="bi bi-newspaper"></i> Notícias
-        </a>
+
         @if(auth()->user()->tipo === 'admin')
             <div class="sidebar-label">Competições</div>
             <a href="{{ route('campeonatos.index') }}"
