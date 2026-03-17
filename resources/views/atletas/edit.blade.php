@@ -52,8 +52,13 @@
                 <div class="col-12">
                     <label class="form-label fw-semibold">Foto do Atleta</label>
                     @if($atleta->foto)
+                        @php
+                            $fotoUrl = Str::startsWith($atleta->foto, ['images/', 'http'])
+                                ? asset($atleta->foto)
+                                : asset('storage/' . $atleta->foto);
+                        @endphp
                         <div class="mb-2">
-                            <img src="{{ asset('storage/' . $atleta->foto) }}"
+                            <img src="{{ $fotoUrl }}"
                                  style="width:60px;height:60px;object-fit:cover;border-radius:50%;border:1px solid #dee2e6;">
                             <small class="text-muted ms-2">Foto atual</small>
                         </div>

@@ -28,7 +28,12 @@
                 <tr>
                     <td class="align-middle">
                         @if($atleta->foto)
-                            <img src="{{ asset($atleta->foto) }}"
+                            @php
+                                $fotoUrl = Str::startsWith($atleta->foto, ['images/', 'http'])
+                                    ? asset($atleta->foto)
+                                    : asset('storage/' . $atleta->foto);
+                            @endphp
+                            <img src="{{ $fotoUrl }}"
                                  style="width:40px;height:40px;object-fit:cover;border-radius:50%;">
                         @else
                             <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
