@@ -2,17 +2,20 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\PublicController;
 use App\Http\Controllers\CampeonatoController;
 use App\Http\Controllers\TimeController;
 use App\Http\Controllers\AtletaController;
 use App\Http\Controllers\TabelaClassificacaoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NoticiaController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 
 // -------- PÁGINA INICIAL --------
-Route::get('/', function () {
-    return redirect('/login');
-});
+
+
+Route::get('/', [PublicController::class, 'index']);
 
 
 // -------- AUTH --------
@@ -65,3 +68,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/noticia', [NoticiaController::class,'index'])->name('noticia');
 
 });
+
+    //--------------------------- RECUPERAÇÃO DE SENHA----------------------------
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+
+    // Enviar email
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+    // Fazer nova senha
+    Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+
+    // Salvar nova senha
+    Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
