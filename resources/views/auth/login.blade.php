@@ -62,6 +62,9 @@
                     Não tem conta? <span class="text-white">Criar conta</span>
                 </a>
             </div>
+            <a href="{{ route('password.request') }}">
+                Esqueci minha senha
+            </a>
 
         </div>
     </div>

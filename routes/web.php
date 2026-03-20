@@ -69,14 +69,23 @@ Route::middleware('auth')->group(function () {
 
 });
 
-    //--------------------------- RECUPERAÇÃO DE SENHA----------------------------
-    Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    //--------------------------- RECUPERAÇÃO DE SENHA---------------------------------------------------------------------------------------------
+   
 
-    // Enviar email
-    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+       
 
-    // Fazer nova senha
-    Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+        // esqueceu senha (formulário)
+        Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
+            ->name('password.request');
 
-    // Salvar nova senha
-    Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+        // enviar email
+        Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])
+            ->name('password.email');
+
+        // tela de redefinir senha
+        Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])
+            ->name('password.reset');
+
+        // salvar nova senha
+        Route::post('/reset-password', [ResetPasswordController::class, 'reset'])
+            ->name('password.update');
