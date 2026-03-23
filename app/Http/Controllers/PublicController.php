@@ -23,7 +23,7 @@ class PublicController extends Controller
     if ($response->successful()) {
         $dados = $response->json();
         $noticias = $dados['articles'] ?? [];
-        $noticias = array_slice($noticias, 0, 6);
+        $noticias = array_slice($noticias, 0, 100);
     } else {
         $noticias = [];
     }
