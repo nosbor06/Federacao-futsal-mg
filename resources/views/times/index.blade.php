@@ -47,7 +47,7 @@
                     <td class="align-middle">{{ $time->cidade }}</td>
                     <td class="align-middle">{{ $time->ginasio }}</td>
                     @if(auth()->user()->tipo === 'admin')
-                        <td class="align-middle text-muted small">{{ $time->user->nome ?? '—' }}</td>
+                        <td class="align-middle text-muted small">{{ $time->responsavel->nome ?? '—' }}</td>
                     @endif
                     <td class="text-end align-middle">
                         <a href="{{ route('times.edit', $time->id) }}" class="btn btn-sm btn-outline-secondary me-1">
