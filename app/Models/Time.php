@@ -17,12 +17,19 @@ class Time extends Model
         'cidade', 
         'ginasio', 
         'escudo', 
-        'user_id'
+        'user_id',
+        'responsavel_id'  // Adicione isso
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // Adicione este relacionamento
+    public function responsavel()
+    {
+        return $this->belongsTo(User::class, 'responsavel_id');
     }
 
     public function atletas()

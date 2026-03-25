@@ -11,7 +11,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-
+Use App\Http\Controllers\JogoController;
 // -------- PÁGINA INICIAL --------
 
 
@@ -90,4 +90,11 @@ Route::middleware('guest')->group(function () {
     // Processar reset de senha
     Route::post('/reset-password', [ResetPasswordController::class, 'reset'])
         ->name('password.update');
+});
+
+
+//jogoss
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('jogos', JogoController::class);
 });

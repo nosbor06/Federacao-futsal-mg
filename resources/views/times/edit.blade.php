@@ -36,6 +36,28 @@
                            value="{{ old('ginasio', $time->ginasio) }}" required>
                     @error('ginasio')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
+
+                {{-- Alterar responsável pelo Time --}}
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Responsável pelo Time</label>
+                    <select name="responsavel_id" class="form-select @error('responsavel_id') is-invalid @enderror">
+                        <option value="">Selecione um responsável</option>
+                        @foreach($usuarios as $usuario)
+                            <option value="{{ $usuario->id }}" 
+                                @selected(old('responsavel_id', $time->responsavel_id) == $usuario->id)>
+                                {{ $usuario->nome }} ({{ $usuario->email }})
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('responsavel_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    @if($time->responsavel)
+                        <small class="text-muted d-block mt-1">
+                            <i class="bi bi-info-circle"></i>
+                            Responsável atual: <strong>{{ $time->responsavel->nome }}</strong>
+                        </small>
+                    @endif
+                </div>
+
                 <div class="col-12">
                     <label class="form-label fw-semibold">Escudo do Time</label>
                     @if($time->escudo)

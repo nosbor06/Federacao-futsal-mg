@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Time;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TimeController extends Controller
@@ -55,7 +56,10 @@ class TimeController extends Controller
             ->when(auth()->user()->tipo != 'admin', fn($q) => $q->where('user_id', auth()->id()))
             ->firstOrFail();
 
-        return view('times.edit', compact('time'));
+        // Buscar todos os usuários para o select
+        $usuarios = User::orderBy('nome')->get();
+
+        return view('times.edit', compact('time', 'usuarios'));
     }
 
     public function update(Request $request, string $id)
@@ -66,6 +70,7 @@ class TimeController extends Controller
             'cidade'  => 'required|string|max:200',
             'ginasio' => 'required|string|max:200',
             'escudo'  => 'nullable|image|max:2048',
+            'responsavel_id' => 'nullable|exists:users,id',  // Valida o responsável
         ]);
 
         $time = Time::where('id', $id)
@@ -77,6 +82,7 @@ class TimeController extends Controller
             'cnpj'    => $request->cnpj,
             'cidade'  => $request->cidade,
             'ginasio' => $request->ginasio,
+            'responsavel_id' => $request->responsavel_id,  // Adicione isso
         ];
 
         if($request->hasFile('escudo')){
@@ -95,7 +101,6 @@ class TimeController extends Controller
             ->firstOrFail();
 
         $time->delete();
-
-        return redirect()->route('times.index')->with('success','Time removido com sucesso!');
+        return redirect()->route('times.index')->with('success','Time excluído com sucesso!');
     }
 }
