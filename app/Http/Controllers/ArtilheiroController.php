@@ -6,27 +6,46 @@ use App\Models\Artilheiro;
 use App\Models\Campeonato;
 use App\Models\Atleta;
 use App\Models\Time;
+use App\Models\TabelaClassificacao;
 use Illuminate\Http\Request;
 
 class ArtilheiroController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('admin');
-    }
-
     public function index()
     {
         $campeonatos = Campeonato::all();
+        
         return view('artilheiros.index', compact('campeonatos'));
     }
 
     public function create()
     {
-        $campeonatos = Campeonato::all();
+        $campeonatos = Campeonato::where('status', 'em_andamento')->get();
         $atletas = Atleta::all();
         $times = Time::all();
-        return view('artilheiros.create', compact('campeonatos', 'atletas', 'times'));
+        
+        // Preparar atletas agrupados por campeonato
+        $atletasPorCampeonato = [];
+        foreach ($campeonatos as $campeonato) {
+            $atletasDoC = TabelaClassificacao::where('campeonato_id', $campeonato->id)
+                ->with('time')
+                ->get()
+                ->pluck('time_id')
+                ->toArray();
+
+            $atletasPorCampeonato[$campeonato->id] = Atleta::whereIn('time_id', $atletasDoC)
+                ->with('time')
+                ->get()
+                ->map(fn($atleta) => [
+                    'id' => $atleta->id,
+                    'nome' => $atleta->nome,
+                    'time_id' => $atleta->time_id,
+                    'time_nome' => $atleta->time->nome,
+                ])
+                ->values();
+        }
+        
+        return view('artilheiros.create', compact('campeonatos', 'atletas', 'times', 'atletasPorCampeonato'));
     }
 
     public function store(Request $request)
@@ -38,15 +57,32 @@ class ArtilheiroController extends Controller
             'gols' => 'required|integer|min:0',
         ]);
 
-        Artilheiro::create($request->all());
+        // Validar se o atleta pertence ao time
+        $atleta = Atleta::find($request->atleta_id);
+        if ($atleta->time_id != $request->time_id) {
+            return back()->with('error', 'O atleta selecionado não pertence a este time!');
+        }
 
+        // Validar se o time pertence ao campeonato
+        $timeValido = TabelaClassificacao::where('campeonato_id', $request->campeonato_id)
+            ->where('time_id', $request->time_id)
+            ->exists();
+
+        if (!$timeValido) {
+            return back()->with('error', 'O time selecionado não pertence a este campeonato!');
+        }
+
+        Artilheiro::create($request->all());
         return redirect()->route('artilheiros.index')->with('success', 'Artilheiro adicionado com sucesso!');
     }
 
     public function edit(Artilheiro $artilheiro)
     {
         $campeonatos = Campeonato::all();
-        return view('artilheiros.edit', compact('artilheiro', 'campeonatos'));
+        $atletas = Atleta::all();
+        $times = Time::all();
+        
+        return view('artilheiros.edit', compact('artilheiro', 'campeonatos', 'atletas', 'times'));
     }
 
     public function update(Request $request, Artilheiro $artilheiro)
@@ -55,25 +91,13 @@ class ArtilheiroController extends Controller
             'gols' => 'required|integer|min:0',
         ]);
 
-        $artilheiro->update(['gols' => $request->gols]);
-
-        return redirect()->route('artilheiros.index')->with('success', 'Artilheiro atualizado com sucesso!');
+        $artilheiro->update($request->only('gols'));
+        return redirect()->route('artilheiros.index')->with('success', 'Artilheiro atualizado!');
     }
 
     public function destroy(Artilheiro $artilheiro)
     {
         $artilheiro->delete();
-        return redirect()->route('artilheiros.index')->with('success', 'Artilheiro removido com sucesso!');
-    }
-
-    public function porCampeonato($campeonatoId)
-    {
-        $campeonato = Campeonato::findOrFail($campeonatoId);
-        $artilheiros = Artilheiro::where('campeonato_id', $campeonatoId)
-            ->orderBy('gols', 'desc')
-            ->with(['atleta', 'time'])
-            ->get();
-
-        return view('artilheiros.por-campeonato', compact('campeonato', 'artilheiros'));
+        return redirect()->route('artilheiros.index')->with('success', 'Artilheiro removido!');
     }
 }

@@ -13,7 +13,7 @@
             @csrf
             <div class="mb-3">
                 <label class="form-label fw-semibold">Campeonato <span class="text-danger">*</span></label>
-                <select name="campeonato_id" class="form-select @error('campeonato_id') is-invalid @enderror" required>
+                <select name="campeonato_id" id="campeonato_id" class="form-select @error('campeonato_id') is-invalid @enderror" required>
                     <option value="">Selecione</option>
                     @foreach($campeonatos as $campeonato)
                         <option value="{{ $campeonato->id }}" @selected(old('campeonato_id') == $campeonato->id)>
@@ -26,27 +26,16 @@
 
             <div class="mb-3">
                 <label class="form-label fw-semibold">Atleta <span class="text-danger">*</span></label>
-                <select name="atleta_id" class="form-select @error('atleta_id') is-invalid @enderror" required>
-                    <option value="">Selecione</option>
-                    @foreach($atletas as $atleta)
-                        <option value="{{ $atleta->id }}" @selected(old('atleta_id') == $atleta->id)>
-                            {{ $atleta->nome }}
-                        </option>
-                    @endforeach
+                <select name="atleta_id" id="atleta_id" class="form-select @error('atleta_id') is-invalid @enderror" required>
+                    <option value="">Selecione o campeonato primeiro</option>
                 </select>
                 @error('atleta_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
 
             <div class="mb-3">
                 <label class="form-label fw-semibold">Time <span class="text-danger">*</span></label>
-                <select name="time_id" class="form-select @error('time_id') is-invalid @enderror" required>
-                    <option value="">Selecione</option>
-                    @foreach($times as $time)
-                        <option value="{{ $time->id }}" @selected(old('time_id') == $time->id)>
-                            {{ $time->nome }}
-                        </option>
-                    @endforeach
-                </select>
+                <input type="text" id="time_nome" class="form-control" placeholder="Time será preenchido automaticamente" disabled>
+                <input type="hidden" name="time_id" id="time_id" value="{{ old('time_id') }}">
                 @error('time_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
 
@@ -66,5 +55,45 @@
         </form>
     </div>
 </div>
+
+<script>
+    // Dados dos atletas por campeonato
+    const atletasPorCampeonato = @json($atletasPorCampeonato);
+
+    document.getElementById('campeonato_id').addEventListener('change', function() {
+        const campeonatoId = this.value;
+        const atletasDisponiveis = atletasPorCampeonato[campeonatoId] || [];
+
+        const atletaSelect = document.getElementById('atleta_id');
+        atletaSelect.innerHTML = '<option value="">Selecione um atleta</option>';
+        
+        atletasDisponiveis.forEach(atleta => {
+            const option = document.createElement('option');
+            option.value = atleta.id;
+            option.textContent = atleta.nome;
+            option.dataset.timeId = atleta.time_id;
+            option.dataset.timeNome = atleta.time_nome;
+            atletaSelect.appendChild(option);
+        });
+
+        // Limpar time ao mudar campeonato
+        document.getElementById('time_nome').value = '';
+        document.getElementById('time_id').value = '';
+    });
+
+    document.getElementById('atleta_id').addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const timeId = selectedOption.dataset.timeId;
+        const timeNome = selectedOption.dataset.timeNome;
+
+        if (timeId) {
+            document.getElementById('time_id').value = timeId;
+            document.getElementById('time_nome').value = timeNome;
+        } else {
+            document.getElementById('time_id').value = '';
+            document.getElementById('time_nome').value = '';
+        }
+    });
+</script>
 
 @endsection

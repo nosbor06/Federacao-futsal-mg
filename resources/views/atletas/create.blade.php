@@ -52,17 +52,14 @@
                     <label class="form-label fw-semibold">Foto do Atleta</label>
                     <input type="file" name="foto" class="form-control @error('foto') is-invalid @enderror"
                            accept="image/*">
-                    <div class="form-text">JPG, PNG ou GIF. Máximo 2MB.</div>
                     @error('foto')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
-            </div>
-            <div class="d-flex gap-2 mt-4">
-                <button type="submit" class="btn btn-danger px-4">
-                    <i class="bi bi-check-lg me-1"></i>Salvar
-                </button>
-                <a href="{{ route('atletas.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-danger w-100"><i class="bi bi-check-circle me-2"></i>Cadastrar</button>
+                </div>
             </div>
         </form>
     </div>
 </div>
+
 @endsection
