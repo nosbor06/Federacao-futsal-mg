@@ -144,6 +144,13 @@
                         class="nav-link d-flex align-items-center gap-2 mb-1 {{ request()->routeIs('TabelaClassificacoes.*') ? 'active' : '' }}">
                         <i class="bi bi-list-ol"></i> Classificação
                     </a>
+
+                    <a href="{{ route('artilheiros.index') }}"
+                        class="nav-link d-flex align-items-center gap-2 mb-1 {{ request()->routeIs('artilheiros.*') ? 'active' : '' }}">
+                        <i class="bi bi-award"></i> Artilheiros
+                    </a>
+
+
                 @endif
             </nav>
 

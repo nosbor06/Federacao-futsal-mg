@@ -11,10 +11,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NoticiaController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-Use App\Http\Controllers\JogoController;
+use App\Http\Controllers\JogoController;
+use App\Http\Controllers\ArtilheiroController;
+
 // -------- PÁGINA INICIAL --------
-
-
 Route::get('/', [PublicController::class, 'index']);
 
 
@@ -57,6 +57,11 @@ Route::middleware('auth')->group(function () {
         Route::resource('TabelaClassificacoes', TabelaClassificacaoController::class)
             ->parameters(['TabelaClassificacoes' => 'tabelaClassificacao']);
 
+        // ARTILHEIROS (só admin gerencia)
+        Route::resource('artilheiros', ArtilheiroController::class);
+        Route::get('/artilheiros-campeonato/{campeonato}', [ArtilheiroController::class, 'porCampeonato'])
+            ->name('artilheiros.por-campeonato');
+
     });
 
     // -------- ROTAS COMPARTILHADAS (admin + responsável) --------
@@ -64,16 +69,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('times', TimeController::class);
     Route::resource('atletas', AtletaController::class);
 
-    // -----------ROTAS NOTICIAS ------------
+    // Jogos
+    Route::resource('jogos', JogoController::class);
+
+    // Notícias
     Route::get('/noticia', [NoticiaController::class,'index'])->name('noticia');
 
 });
 
-    //--------------------------- RECUPERAÇÃO DE SENHA---------------------------------------------------------------------------------------------
-   
-
-       
-// Rotas de Autenticação - Esqueceu Senha
+// -------- RECUPERAÇÃO DE SENHA --------
 Route::middleware('guest')->group(function () {
     // Formulário de esqueceu senha
     Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
@@ -92,9 +96,7 @@ Route::middleware('guest')->group(function () {
         ->name('password.update');
 });
 
-
-//jogoss
-
-Route::middleware(['auth'])->group(function () {
-    Route::resource('jogos', JogoController::class);
-});
+// -------- ROTAS PÚBLICAS --------
+// Rota pública para ver artilheiros por campeonato
+Route::get('/artilheiros/campeonato/{campeonato}', [ArtilheiroController::class, 'porCampeonato'])
+    ->name('artilheiros.publico');

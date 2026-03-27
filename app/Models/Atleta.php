@@ -12,16 +12,21 @@ class Atleta extends Model
     protected $table = 'atletas';
 
     protected $fillable = [
-        'nome', 
-        'cpf', 
-        'data_nascimento', 
-        'categoria', 
-        'time_id', 
+        'nome',
+        'cpf',
+        'data_nascimento',
+        'categoria',
+        'time_id',
         'foto'
     ];
 
     public function time()
     {
         return $this->belongsTo(Time::class, 'time_id');
+    }
+
+    public function artilheiros()
+    {
+        return $this->hasMany(Artilheiro::class);
     }
 }

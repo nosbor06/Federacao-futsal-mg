@@ -18,9 +18,20 @@ class JogoController extends Controller
 
     public function create()
     {
-        $times = Time::all();
         $campeonatos = Campeonato::where('status', 'em_andamento')->get();
-        return view('jogos.create', compact('times', 'campeonatos'));
+        
+        // Preparar times agrupados por campeonato
+        $timesPorCampeonato = [];
+        foreach ($campeonatos as $campeonato) {
+            $timesPorCampeonato[$campeonato->id] = TabelaClassificacao::where('campeonato_id', $campeonato->id)
+                ->with('time')
+                ->get()
+                ->map(fn($tc) => ['id' => $tc->time->id, 'nome' => $tc->time->nome])
+                ->unique('id')
+                ->values();
+        }
+        
+        return view('jogos.create', compact('campeonatos', 'timesPorCampeonato'));
     }
 
     public function store(Request $request)
@@ -31,6 +42,17 @@ class JogoController extends Controller
             'time_visitante_id' => 'required|exists:times,id|different:time_casa_id',
             'data_hora' => 'required|date',
         ]);
+
+        // Validar se os times pertencem ao campeonato
+        $campeonatoId = $request->campeonato_id;
+        $timeCasaValido = TabelaClassificacao::where('campeonato_id', $campeonatoId)
+            ->where('time_id', $request->time_casa_id)->exists();
+        $timeVisitanteValido = TabelaClassificacao::where('campeonato_id', $campeonatoId)
+            ->where('time_id', $request->time_visitante_id)->exists();
+
+        if (!$timeCasaValido || !$timeVisitanteValido) {
+            return back()->with('error', 'Um ou ambos os times não pertencem a este campeonato!');
+        }
 
         Jogo::create($request->all());
         return redirect()->route('jogos.index')->with('success', 'Jogo criado com sucesso!');
